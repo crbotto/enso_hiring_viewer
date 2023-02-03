@@ -1,6 +1,10 @@
 import React from 'react';
 
-const Rectangle = ({ x1, y1, rectWidth, rectHeight, index }) => {
+// Component to draw the rectangle
+// params: x1 = indicates the position where the mouse went down
+// rectWidht = the width for the rectangle
+// rectHeight = the height for the rectangle
+const Rectangle = ({ x1, rectWidth, rectHeight }) => {
     const styles = {
         rectangle: {
             fill: 'lightsteelblue',
@@ -9,8 +13,8 @@ const Rectangle = ({ x1, y1, rectWidth, rectHeight, index }) => {
     }
 
     return (
-        <svg key={`rect-${index}`} style={{width:"100%", height:`${rectHeight}`,position: "absolute", top:0, left:0}}>
-            <rect id="box" style={styles.rectangle} x={x1} y={y1} width={rectWidth} height={rectHeight}/>
+        <svg style={{width:"100%", height:`${rectHeight}`,position: "absolute", top:0, left:0}}>
+            <rect id="box" style={styles.rectangle} x={x1}  width={rectWidth} height={rectHeight}/>
         </svg>
     )
 }

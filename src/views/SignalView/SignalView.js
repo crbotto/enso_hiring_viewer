@@ -23,12 +23,12 @@ const Overlay = styled.div`
 const ChartWrapper = styled.div``;
 
 const SignalView = () => {
+    // this is the array that will hold all the events
     const [events, setEvents] = useState([])
+    // event obj to hold the current event being created
     let currentEvent = {
         x1: 0,
-        y1: 0,
-        x2: 0,
-        y2: 0,
+        width: 0,
         height: 0
     }
     // Access the height of the chart as chartWrapperRef.current?.clientHeight to determine the height to set on events
@@ -40,30 +40,39 @@ const SignalView = () => {
         event.preventDefault();
     };
 
+    // when the mouse is press down start the event
     const handleOverlayMouseDown = (event) => {
         // Prevent the event from bubbling up to the chart
         event.stopPropagation();
         event.preventDefault();
-        currentEvent.x1 = event.clientX;
-        currentEvent.y1 = event.clientY;
-        currentEvent.height = chartWrapperRef.current?.clientHeight;
+        if(event.clientX >= 0){
+            currentEvent.x1 = event.clientX;
+            currentEvent.height = chartWrapperRef.current?.clientHeight;
+        }
     };
 
+    // when the mouse is up finish the event and draw the rectangle
     const handleOverlayMouseUp = (event) => {
         // Prevent the event from bubbling up to the chart
         event.stopPropagation();
         event.preventDefault();
-        currentEvent.x2 = event.clientX;
+        if(event.clientX >= 0){
+            currentEvent.width = event.clientX - currentEvent.x1;
        
-        let auxEvents = [...events];
-        auxEvents.push(currentEvent);
-        setEvents([...auxEvents]);
-        currentEvent = {
-            x1: 0,
-            x2: 0,
-            height: 0
-        }   
+            let auxEvents = [...events];
+            auxEvents.push(currentEvent);
+            setEvents([...auxEvents]);
+            currentEvent = {
+                x1: 0,
+                width: 0,
+                height: 0
+            }   
+    }
     };
+
+    // This is the event that should take care of the logig to draw the rectangle while the mouse is moving, didn't have time to implement it
+    // const handleOverlayMouseMove = (event) => {
+    // }
 
     return (
         <Container>
@@ -73,9 +82,10 @@ const SignalView = () => {
             {/* The overlay covers the same exact area the sine wave chart does */}
             <Overlay  onClick={handleOverlayClick} onMouseDown={handleOverlayMouseDown} onMouseUp={handleOverlayMouseUp} events={events}>
                 {/* You can place events in here as children if you so choose */}
+                {/* iterate thru the events and draw them       */}
                 {events && 
                     events.map((drawEvent, index) => {
-                        return <Rectangle key={index} x1={drawEvent.x1} y1={drawEvent.y1} rectWidth={drawEvent.x2 - drawEvent.x1} rectHeight={drawEvent.height} index={index}></Rectangle>
+                        return <Rectangle key={`rect-${index}`} x1={drawEvent.x1} rectWidth={drawEvent.width} rectHeight={drawEvent.height}></Rectangle>
                     })
                 }
             </Overlay>
