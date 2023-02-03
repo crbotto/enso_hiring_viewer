@@ -6,6 +6,13 @@ import React from 'react';
 // rectHeight = the height for the rectangle
 const Rectangle = ({ x1, rectWidth, rectHeight }) => {
     const styles = {
+        svg: {
+            width:"100%",
+            height:`${rectHeight}`,
+            position: "absolute", 
+            top:0, 
+            left:0
+        },
         rectangle: {
             fill: 'lightsteelblue',
             opacity: '50%',
@@ -13,7 +20,7 @@ const Rectangle = ({ x1, rectWidth, rectHeight }) => {
     }
 
     return (
-        <svg style={{width:"100%", height:`${rectHeight}`,position: "absolute", top:0, left:0}}>
+        <svg style={styles.svg}>
             <rect id="box" style={styles.rectangle} x={x1}  width={rectWidth} height={rectHeight}/>
         </svg>
     )
